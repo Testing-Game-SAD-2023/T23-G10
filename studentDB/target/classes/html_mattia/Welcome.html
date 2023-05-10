@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"><head>
+<meta charset="ISO-8859-1">
+<title>Welcome</title>
+</head>
+<body>
+
+<h1>Welcome page</h1>
+<h2> You are logged</h2>
+<form th:action="@{/student/{email}}" method="get"></form>
+<a href="/logout">Logout</a>
+</body>
+</html>

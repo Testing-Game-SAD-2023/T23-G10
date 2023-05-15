@@ -1,6 +1,9 @@
 package myPackage.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
@@ -10,10 +13,30 @@ public class Student {
 	private @Id @GeneratedValue Long id;
 	private String nome;
 	private String cognome;
-	private Corso corso;
+	private @Enumerated(EnumType.STRING) Corso corso;
 	private String email;
 	private String password;
+	
 	private String role;
+	@Column(name = "verification_code", length = 64)
+    private String verificationCode;
+    private boolean enabled;
+
+	public String getVerificationCode() {
+		return verificationCode;
+	}
+
+	public void setVerificationCode(String verificationCode) {
+		this.verificationCode = verificationCode;
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
 
 	public Student() {};
 	

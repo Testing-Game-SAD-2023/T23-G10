@@ -6,6 +6,7 @@ public class registrationData {
 	private String cognome;
 	private String email;
 	private String password;
+	private String confirm_password;
 	private String corso;
 	
 	public String getNome() {
@@ -38,6 +39,11 @@ public class registrationData {
 	public void setCorso(String corso) {
 		this.corso = corso;
 	}
-	
+	public String getConfirm_password() {
+		return confirm_password;
+	}
+	public void setConfirm_password(String confirm_password) {
+		this.confirm_password = confirm_password;
+	}
 	
 }

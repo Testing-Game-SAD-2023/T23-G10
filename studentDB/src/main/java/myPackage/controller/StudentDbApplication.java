@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import myPackage.entity.Student;
+import myPackage.repository.StudentRepository;
 import myPackage.service.MyUserDetailsService;
 
 @SpringBootApplication
@@ -23,6 +24,9 @@ public class StudentDbApplication {
 	
 	@Autowired
 	BCryptPasswordEncoder passwordEncoder;
+	
+	@Autowired
+	StudentRepository repo;
 
 	public static void main(String[] args) {
 		SpringApplication.run(StudentDbApplication.class, args);
@@ -34,6 +38,7 @@ public class StudentDbApplication {
 		admin.setEmail("admin");
 		admin.setPassword(passwordEncoder.encode("pass"));
 		admin.setRole("ADMIN");
-		userDetailsService.createStudent(admin);
+		admin.setEnabled(true);
+		repo.save(admin);
 	}
 }

@@ -50,7 +50,7 @@ class StudentController {
 	
 	@GetMapping(value="/register", produces="text/html")
 	String getRegisterForm() {
-		return readHtml("classpath:prova/regGPT.html");
+		return readHtml("classpath:prova/registrationFormBetter.html");
 	}
 	
 	@GetMapping(value="/registration_success", produces="text/html")

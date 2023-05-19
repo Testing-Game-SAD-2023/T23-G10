@@ -5,33 +5,166 @@
 <title>Registrazione</title>
 </head>
 <body>
+	
+<div id="container" class="container">
+	
+	<h1>Registrazione</h1>
+	
+	<form id="registration-form" action="/register" method="POST">
+	
+	  <label for="nome">Nome :</label> <br/>
+	  <input type="text" id="nome" name="nome" required> 
+	  <div class="error" id="nome-error"></div> <br/>
+	  
+	  <label for="cognome">Cognome :</label> <br/>
+	  <input type="text" id="cognome" name="cognome" required/> 
+	  <div class="error" id="cognome-error"></div> <br/>
+	  
+	  <label for="email">Email:</label> <br/>
+	  <input type="email" id="email" name="email" required> 
+	  <div class="error" id="email-error"></div> <br/>
+	  
+	  <label for="password">Password:</label> <br/>
+	  <input type="password" id="password" name="password" required> 
+	  <div class="error" id="password-error"></div> <br/>
+	  
+	  <label for="confirm_password">Conferma password:</label> <br/>
+	  <input type="password" id="confirm_password" name="confirm_password" required> 
+	  <div class="error" id="confirm_password-error"></div> <br/>
+	  
+	  <label for="corso" id="corso">Corso :</label> <br/>
+		<select name="corso" required>
+		<option value=""></option>
+			<option value="Associate">Associate</option>
+			<option value="Bachelor">Bachelor</option>
+			<option value="Graduate">Graduate</option>
+			<option value="Doctorate">Doctorate</option>
+	</select>
+	<br/>
+	<br/>
+	  <button type="submit">Submit</button> <br/> <br/> 
+	</form>
+	
+	<div class="error" id="backend-error"></div>
+	 
+</div>
 
-<h1>Registrazione</h1>
-<form action="register" method="post">
-<label for="nome">Nome :</label> <br/>
-<input type="text" name="nome" required/> <br/>
+<script>
+  const form = document.querySelector('#registration-form');
 
-<label for="cognome">Cognome :</label> <br/>
-<input type="text" name="cognome" required/> <br/>
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
 
-<label for="email">Email :</label> <br/>
-<input type="email" name="email" required/> <br/>
+    const nome = document.querySelector('#nome');
+    const cognome = document.querySelector('#cognome');
+    const email = document.querySelector('#email');
+    const password = document.querySelector('#password');
+    const confirm_password = document.querySelector('#confirm_password');	
 
-<label for="password">Password :</label> <br/>
-<input type="password" name="password" required/> <br/>
+    // Clear any existing errors
+    clearErrors();
 
-<label for="corso">Corso :</label> <br/>
-<select name="corso" required>
-	<option value=""></option>
-		<option value="Associate">Associate</option>
-		<option value="Bachelor">Bachelor</option>
-		<option value="Graduate">Graduate</option>
-		<option value="Doctorate">Doctorate</option>
-</select>
-<br/>
-<button type="submit">Submit</button>
-</form>
-<br/>
+    // Validate the name and email using regular expressions
+    const nameRegex = /^[a-zA-Z ]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+    if (!nameRegex.test(nome.value)) {
+      showError('Per favore inserisci un nome corretto', 'nome');
+      return;
+    }
+	
+    if (!nameRegex.test(cognome.value)) {
+        showError('Per favore inserisci un cognome corretto', 'cognome');
+        return;
+      }
+    
+    if (!emailRegex.test(email.value)) {
+      showError('Per favore inserisci un indirizzo email valido', 'email');
+      return;
+    }
+	
+    if (!validatePassword(password.value)) {
+    	showError('La password deve contenere almeno 8 caratteri di cui una minuscola'
+    			+ ',una maiuscola e un carattere speciale.','password');
+    	return;
+    }
+    
+    if(password.value!=confirm_password.value) {
+    	showError('Le password inserite non coincidono', 'confirm_password');
+        return;
+    }
+    
+    // Submit the form
+    try {
+      const response = await fetch(form.action, {
+        method: form.method,
+        body: new FormData(form)
+      });
+      
+      if (!response.ok) {
+        const message = await response.text();
+        showError(message,'backend');
+        return;
+      }
+      else 
+      	location.href = "/registration_success";
+      
+    } catch (error) {
+      showError(error.message);
+    }
+  });
+  
+  function validatePassword(password) {  
+	  const lowerCaseRegex = /[a-z]/;
+	  const upperCaseRegex = /[A-Z]/;
+	  const specialCharRegex = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/;
+	  if (password.length < 8 ||
+	      !lowerCaseRegex.test(password) ||
+	      !upperCaseRegex.test(password) ||
+	      !specialCharRegex.test(password)) {
+	    return false;
+	  }
+	  return true;
+  }
+  
+  function clearErrors() {
+    const errors = document.querySelectorAll('.error');
+    errors.forEach((error) => {
+      error.classList.remove('active');
+      error.textContent = '';
+    });
+  }
+
+  function showError(message, field) {
+    if (field) {
+      const errorElement = document.querySelector(`#${field}-error`);
+      if (errorElement) {
+        errorElement.textContent = message;
+        errorElement.classList.add('active');
+        return;
+      }
+    }
+    alert(message);
+  }
+</script>
 </body>
+
+<style>
+  .error {
+    display: none;
+    color: red;
+    font-size: 14px;
+  }
+
+  .error.active {
+    display: block;
+  }
+  
+  /*.container {
+  	display: flex;
+  	justify-content: center;
+  	align-items: center;
+  }*/
+</style>
+
 </html>

@@ -6,6 +6,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -27,13 +28,16 @@ public class SecurityConfiguration {
 	 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-		
 		http.authorizeRequests()
-				.antMatchers("/register","/registration_success","/verify").permitAll()
-				.antMatchers("/user").authenticated()
+				.antMatchers("/register","/registration_success","/verify",
+						"/forgot_password","/reset_password").permitAll()
+				.antMatchers("/login_success").authenticated()
+				.antMatchers("/user/{userId}")
+					.access("hasRole('USER') and @securityConfiguration.hasUserId(authentication,#userId)")
 				.anyRequest().hasRole("ADMIN")
 				.and()
-				.formLogin().loginPage("/login").permitAll();
+				.formLogin().loginPage("/login").permitAll()
+				.defaultSuccessUrl("/login_success");
 		
 		http.csrf().disable();
 		
@@ -42,4 +46,9 @@ public class SecurityConfiguration {
 		
 		return http.build();
 	}
+	
+	public boolean hasUserId(Authentication authentication, Long userId) {
+        MyUserDetails principal = (MyUserDetails) authentication.getPrincipal();
+        return principal.getId() == userId;
+    }
 }

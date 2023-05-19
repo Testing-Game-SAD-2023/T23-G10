@@ -15,6 +15,7 @@ public class MyUserDetails implements UserDetails {
 
 	private String username;
 	private String password;
+	private Long id;
 	private Boolean enabled;
 	private List<GrantedAuthority> authorities;
 
@@ -24,6 +25,7 @@ public class MyUserDetails implements UserDetails {
 		this.username = student.getEmail();
 		this.password = student.getPassword();
 		this.enabled = student.isEnabled();
+		this.id = student.getId();
 		this.authorities = new ArrayList<GrantedAuthority>();
 		this.authorities.add(new SimpleGrantedAuthority("ROLE_" + student.getRole()));
 	}
@@ -42,7 +44,11 @@ public class MyUserDetails implements UserDetails {
 	public String getUsername() {
 		return username;
 	}
-
+	
+	public Long getId() {
+		return id;
+	}
+	
 	@Override
 	public boolean isAccountNonExpired() {
 		return true;

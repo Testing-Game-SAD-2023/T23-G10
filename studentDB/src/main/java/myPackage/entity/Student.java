@@ -18,25 +18,15 @@ public class Student {
 	private String password;
 	
 	private String role;
+	
+	private boolean enabled;
 	@Column(name = "verification_code", length = 64)
     private String verificationCode;
-    private boolean enabled;
+    
+    @Column(name = "reset_password_token", length = 64)
+    private String resetPasswordToken;
 
-	public String getVerificationCode() {
-		return verificationCode;
-	}
 
-	public void setVerificationCode(String verificationCode) {
-		this.verificationCode = verificationCode;
-	}
-
-	public boolean isEnabled() {
-		return enabled;
-	}
-
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
 
 	public Student() {};
 	
@@ -99,5 +89,29 @@ public class Student {
 	}
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	public String getVerificationCode() {
+		return verificationCode;
+	}
+
+	public void setVerificationCode(String verificationCode) {
+		this.verificationCode = verificationCode;
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+	
+	public String getResetPasswordToken() {
+		return resetPasswordToken;
+	}
+
+	public void setResetPasswordToken(String resetPasswordToken) {
+		this.resetPasswordToken = resetPasswordToken;
 	}
 }

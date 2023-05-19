@@ -11,10 +11,12 @@ import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.mail.MailSendException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 import myPackage.entity.Corso;
 import myPackage.entity.Student;
 import myPackage.entity.registrationData;
+import myPackage.service.MyUserDetails;
 import myPackage.service.MyUserDetailsService;
 import myPackage.exception.StudentException;
 
@@ -43,14 +46,30 @@ class StudentController {
 	
 	//Public//////////////////
 	
-	@GetMapping("/prova")
-	String prova() {
-		return "messaggio di prova";
+	//Come prova
+	@GetMapping("/user/{userId}")
+	String readUserAreaId(@PathVariable Long userId) {
+		return "Area dell'utente " + userId;
+	}
+	
+	// Questo nell'ipotesi che dopo il login venga effettuato un accesso
+	// all'url user/id dove l'id è appunto relativo all'utente che ha effettuato
+	// l'autenticazione.
+	@GetMapping("/login_success")
+	void loginSuccess(HttpServletResponse response) {
+		MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String url = "/user/"+ userDetails.getId();
+		
+		try {
+			response.sendRedirect(url);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@GetMapping(value="/register", produces="text/html")
 	String getRegisterForm() {
-		return readHtml("classpath:prova/registrationFormBetter.html");
+		return readHtml("classpath:templates/register.html");
 	}
 	
 	@GetMapping(value="/registration_success", produces="text/html")

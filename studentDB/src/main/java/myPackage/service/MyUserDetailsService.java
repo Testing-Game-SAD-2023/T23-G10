@@ -1,16 +1,12 @@
-	package myPackage.service;
+package myPackage.service;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
-import java.util.Optional;
 
 import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -29,17 +25,19 @@ public class MyUserDetailsService implements UserDetailsService {
 	StudentRepository repo;
 	
 	@Autowired
-	private JavaMailSender mailSender;
+	MailService	mailService;
 	 
 	//Questo metodo è richiesto per l'autenticazione con Spring Security
 	@Override
 	public UserDetails loadUserByUsername(String userName) {
 		
 		//L'username nel nostro caso è l'email dello studente
-		Optional<Student> student = repo.findByEmail(userName);
+		Student student = repo.findByEmail(userName);
 		
-		student.orElseThrow(()-> new UsernameNotFoundException("Studente non trovato"));
-		return student.map(MyUserDetails::new).get();
+		if(student == null) 
+			throw new UsernameNotFoundException("Studente non trovato");
+		
+		return new MyUserDetails(student);
 	}
 	
 	public String createStudent(Student student, HttpServletRequest request) throws UnsupportedEncodingException, MessagingException {
@@ -51,7 +49,7 @@ public class MyUserDetailsService implements UserDetailsService {
 	    student.setVerificationCode(randomCode);
 	    student.setEnabled(false);
 	       
-	    sendVerificationEmail(student, getSiteURL(request));
+	    mailService.sendVerificationEmail(student, mailService.getSiteURL(request));
 	    
 	    repo.save(student);
     	
@@ -71,8 +69,8 @@ public class MyUserDetailsService implements UserDetailsService {
 		
 		/*Controlla se esiste già uno studente (diverso da quello
 		che stiamo modificando) che possiede la stessa email*/		
-		Optional<Student> other = repo.findByEmail(newStudent.getEmail());
-		if(other.isPresent() && other.get().getId() != id) 
+		Student other = repo.findByEmail(newStudent.getEmail());
+		if(other != null && other.getId() != id) 
 			throw new StudentException("Email già in uso");	
 		
 		newStudent.setId(id);
@@ -100,39 +98,27 @@ public class MyUserDetailsService implements UserDetailsService {
 	        repo.save(user);    
 	        return true;
 	    }	     
-	}
-	
-	private void sendVerificationEmail(Student student, String siteURL)
-	        throws MessagingException, UnsupportedEncodingException {
-	    String toAddress = student.getEmail();
-	    String fromAddress = "progettosad@virgilio.it";
-	    String senderName = "SAD Authentication Service";
-	    String subject = "Please verify your registration";
-	    String content = "Dear [[name]],<br>"
-	            + "Please click the link below to verify your registration:<br>"
-	            + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
-	            + "Thank you,<br>";
-	     
-	    MimeMessage message = mailSender.createMimeMessage();
-	    MimeMessageHelper helper = new MimeMessageHelper(message);
-	     
-	    helper.setFrom(fromAddress, senderName);
-	    helper.setTo(toAddress);
-	    helper.setSubject(subject);
-	     
-	    content = content.replace("[[name]]", student.getNome());
-	    String verifyURL = siteURL + "/verify?code=" + student.getVerificationCode();
-	     
-	    content = content.replace("[[URL]]", verifyURL);
-	     
-	    helper.setText(content, true);
-	     
-	    mailSender.send(message);
-	     
-	}
-	
-	private String getSiteURL(HttpServletRequest request) {
-		String siteURL = request.getRequestURL().toString();
-		return siteURL.replace(request.getServletPath(), "");
 	}	
+	
+	public void updateResetPasswordToken(String token, String email) {
+        Student student = repo.findByEmail(email);
+        if (student == null) 
+        	throw new StudentNotFoundException("Impossibile trovare lo studente con email " + email);
+        else if (student.getVerificationCode()!=null)
+        	throw new StudentException("Questa email non è stata ancora verificata");
+        else { 
+        	student.setResetPasswordToken(token);
+        	repo.save(student);
+        }
+    }
+     
+    public Student getByResetPasswordToken(String token) {
+        return repo.findByResetPasswordToken(token);
+    }
+     
+    public void updatePassword(Student student, String newPassword) {
+        student.setResetPasswordToken(null);
+        student.setPassword(newPassword);
+        repo.save(student);
+    }
 }

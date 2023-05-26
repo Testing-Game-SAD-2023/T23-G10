@@ -1,38 +1,38 @@
+---
 openapi: 3.0.3
 info:
   title: Student DB - OpenAPI 3.0
-  description: |-
-    Questa è l'API per il database degli studenti. Le funzionalità offerte sono quelle di registrazione, login, logout e recupero della password, accessibili attraverso chiamate GET a /register, /login, /logout e /forgot-password. Sono presenti altri metodi pubblici che però vengono utilizzati automaticamente dalle pagine html fornite, per cui non dovrebbero essere invocati esplicitamente (o comunque la loro chiamata non avrebbe particolari effetti sul sistema nella maggior parte dei casi). Sono anche presenti alcune funzionalità, accessibili solo dall'utente admin, che consentono la gestione del database come visualizzare la lista degli studenti registrati o in generale effettuare operazioni CRUD.
-
+  description: "Questa è l'API per il database degli studenti. Le funzionalità offerte sono quelle di registrazione, login, logout e recupero della password, accessibili attraverso chiamate GET a /register, /login, /logout e /forgot-password. Sono presenti altri metodi pubblici che però vengono utilizzati automaticamente dalle pagine html fornite, per cui non dovrebbero essere invocati esplicitamente (o comunque la loro chiamata non avrebbe particolari effetti sul sistema nella maggior parte dei casi). Sono anche presenti alcune funzionalità, accessibili solo dall'utente admin, che consentono la gestione del database come visualizzare la lista degli studenti registrati o in generale effettuare operazioni CRUD."
   version: "1.0"
-
+servers:
+- url: /
 tags:
-  - name: register
-    description: Effettua la registrazione 
-  - name: login
-    description: Accedi al sistema
-  - name: logout
-    description: Effettua il logout dal sistema
-  - name: forgot password
-    description: Recupera l'account
-  - name: admin
-    description: Operazioni riservate all'admin
+- name: register
+  description: Effettua la registrazione
+- name: login
+  description: Accedi al sistema
+- name: logout
+  description: Effettua il logout dal sistema
+- name: forgot password
+  description: Recupera l'account
+- name: admin
+  description: Operazioni riservate all'admin
 paths:
   /register:
     get:
       tags:
-        - register
+      - register
       summary: Ottieni il form di registrazione
       description: Questo metodo consente di ottenere il form html per effettuare la registrazione.
       operationId: getRegisterForm
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             text/html: {}
     post:
       tags:
-        - register
+      - register
       summary: Invia i dati per la registrazione
       description: Questo metodo permette di inviare i dati necessari alla registrazione dello studente nel sistema. Se la registrazione va a buon fine viene restituito un file html di conferma.
       operationId: register
@@ -48,65 +48,76 @@ paths:
             schema:
               $ref: '#/components/schemas/Student'
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             text/html: {}
-        '422':
+        "422":
           description: Unprocessable entity
-  /register-success:
-    get:
-      tags:
-        - register
-      summary: Pagina di conferma dopo la registrazione
-      description: Questo metodo viene chiamato automaticamente una volta completata la registrazione. Restituisce una pagina html.
-      operationId: getRegistrationSuccess
-      responses:
-        '200':
-          description: Successful operation
           content:
-            text/html: {}  
+            text/plain:
+              schema:
+                type: string
+                example: I dati inseriti non sono corretti
   /verify:
     get:
       tags:
-        - register
-      summary: Verifica l'email 
+      - register
+      summary: Verifica l'email
       description: Questo metodo viene invocato mediante il link inviato alla mail utilizzata per la registrazione. Viene restituito un html sia in caso di conferma che di errore (codice non valido).
       operationId: verifyUser
       parameters:
-        - name: code
-          in: query
-          description: Codice di verifica
-          required: true
-          schema:
-            type: string
+      - name: code
+        in: query
+        description: Codice di verifica
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             text/html: {}
-        '422':
+        "422":
           description: Unprocessable entity
           content:
             text/html: {}
-
   /login:
     get:
       tags:
-        - login
+      - login
       summary: Ottieni il form di login
       description: L'invocazione di questo metodo permette di ottenere il form per il login.
       operationId: getLoginForm
+      parameters:
+      - name: logout
+        in: query
+        description: Se presente stampa a video il messaggio di logout
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: error
+        in: query
+        description: Se presente stampa a video il messaggio di credenziali invalide
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             text/html: {}
     post:
       tags:
-        - login
+      - login
       summary: Invia i dati per effettuare il login
-      description: Questo metodo consente di inviare al sistema email e password con i quali effettuare l'autenticazione. Dopo la corretta autenticazione di default si viene portati sull'URL "/login_success", oppure si ritorna a "/login?error" in caso di credenziali invalide.
+      description: "Questo metodo consente di inviare al sistema email e password con i quali effettuare l'autenticazione. Dopo la corretta autenticazione di default si viene portati sull'URL \"/login-success\", oppure si ritorna a \"/login?error\" in caso di credenziali invalide."
       operationId: login
       requestBody:
         content:
@@ -120,76 +131,73 @@ paths:
             schema:
               $ref: '#/components/schemas/LoginData'
       responses:
-        '302':
+        "302":
           description: Found
   /login-success:
     get:
       tags:
-        - login
+      - login
       summary: Fai qualcosa dopo il login
       description: Questo metodo viene invocato automaticamente dopo una corretta autenticazione. L'implementazione dipende dall'interfacciamento con i gruppi che utilizzano la funzionalità di login. Può ad esempio restituire un semplice messaggio di conferma o fare un redirect verso l'area dell'utente loggato (Es. /user/id).
       operationId: loginSuccess
       responses:
-        '200':
+        "200":
           description: Successful operation
-       
-            
   /logout:
     get:
       tags:
-        - logout
+      - logout
       summary: Esci dal sistema
-      description: La chiamata di questo metodo cancella i dati relativi alla sessione dell'utente loggato e reindirizza sulla pagina di login.
+      description: La chiamata di questo metodo cancella i dati relativi alla sessione dell'utente loggato e reindirizza su "login?logout".
       operationId: logout
       responses:
-        '302':
+        "302":
           description: Found
-
   /forgot-password:
     get:
       tags:
-        - forgot password
+      - forgot password
       summary: Ottieni il form di recupero dell'account
       description: Restituisce il form per inserire l'email dell'account da recuperare.
       operationId: getForgotPasswordForm
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             text/html: {}
     post:
       tags:
-        - forgot password
+      - forgot password
       summary: Inserisci email dell'account da recuperare
-      description: Questa chiamata permette di inviare al sistema l'email dell'account che si vuole recuperare (e cioè cambiarne la password). Se l'email inserita è valida viene inviato un link a tale indirizzo che consente di cambiare la password e viene restituito un messaggio di conferma (visualizzato sulla pagina html siccome questo metodo viene invocato automaticamente dopo aver inserito l'email nel form di recupero), oppure se l'email non esiste o non è stata ancora verificata viene restituito un messaggio di errore (sempre visualizzato sulla pagina).
+      description: "Questa chiamata permette di inviare al sistema l'email dell'account che si vuole recuperare (e cioè cambiarne la password). Se l'email inserita è valida viene inviato un link a tale indirizzo che consente di cambiare la password e viene restituito un messaggio di conferma (visualizzato sulla pagina html siccome questo metodo viene invocato automaticamente dopo aver inserito l'email nel form di recupero), oppure se l'email non esiste o non è stata ancora verificata viene restituito un messaggio di errore (sempre visualizzato sulla pagina)."
       operationId: processForgotPassword
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RecoverEmail' 
+              $ref: '#/components/schemas/RecoverEmail'
           application/xml:
             schema:
-              $ref: '#/components/schemas/RecoverEmail' 
+              $ref: '#/components/schemas/RecoverEmail'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/RecoverEmail' 
+              $ref: '#/components/schemas/RecoverEmail'
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             text/plain:
               schema:
                 type: string
                 example: Email di conferma inviata
-        '404':
+        "404":
           description: Not found
           content:
             text/plain:
               schema:
                 type: string
                 example: Impossibile trovare lo studente con email mariorossi@gmail.com
-        '422':
+        "422":
           description: Unprocessable entity
           content:
             text/plain:
@@ -199,34 +207,33 @@ paths:
   /reset-password:
     get:
       tags:
-        - forgot password
+      - forgot password
       summary: Ottieni form per cambio password
-      description: La chiamata a questo metodo viene effettuata automaticamente cliccando sul link inviato in precedenza via email, il che consente di mandare come parametro il token di conferma. Se il token è valido viene restituito il form html per resettare la password, altrimenti viene visualizzata una pagina di errore.
+      description: "La chiamata a questo metodo viene effettuata automaticamente cliccando sul link inviato in precedenza via email, il che consente di mandare come parametro il token di conferma. Se il token è valido viene restituito il form html per resettare la password, altrimenti viene visualizzata una pagina di errore."
       operationId: getResetPasswordForm
       parameters:
-        - name: token
-          in: query
-          description: Token di verifica
-          required: true
-          schema:
-            type: string
+      - name: token
+        in: query
+        description: Token di verifica
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             text/html: {}
-        '422':
+        "422":
           description: Unprocessable entity
           content:
-            text/plain:
-              schema:
-                type: string
-                example: Invalid token
+            text/html: {}
     post:
       tags:
-        - forgot password
+      - forgot password
       summary: Cambia la password
-      description: Questo metodo consente di inserire la nuova password dell'account. In maniera automatica viene anche mandato il token di conferma, per cui come nel caso della chiamata get può generare l'errore "Invalid token" nel caso in cui questo non sia corretto. Se invece la procedura avviene con successo viene restituito un messaggio di conferma.
+      description: "Questo metodo consente di inserire la nuova password dell'account. In maniera automatica viene anche mandato il token di conferma, per cui come nel caso della chiamata get può generare l'errore \"Invalid token\" nel caso in cui questo non sia corretto. Può restituire un errore anche nel caso in cui la password non rispetti i vincoli imposti. Se invece la procedura avviene con successo viene restituito un messaggio di conferma."
       operationId: processResetPassword
       requestBody:
         content:
@@ -240,60 +247,61 @@ paths:
             schema:
               $ref: '#/components/schemas/ForgotPasswordData'
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             text/plain:
               schema:
                 type: string
                 example: Password cambiata
-        '422':
+        "422":
           description: Unprocessable entity
           content:
             text/plain:
               schema:
                 type: string
-                example: Invalid token
-
+                example: Password non valida
+            text/html: {}
   /students:
     get:
       tags:
-        - admin
+      - admin
       summary: Ottieni la lista degli studenti registrati
       description: Questo metodo restituisce la lista degli studenti registrati.
       operationId: readAllStudents
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json: {}
-        '403':
+        "403":
           description: Forbidden
       security:
       - cookieAuth: []
-
   /student/{id}:
     get:
       tags:
-        - admin
+      - admin
       summary: Ottieni lo studente in base all'id
       description: Questo metodo restituisce lo studente con id specificato.
       operationId: readStudentById
       parameters:
-        - name: id
-          in: path
-          description: Id dello studente
-          required: true
-          schema:
-            type: string
+      - name: id
+        in: path
+        description: Id dello studente
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json: {}
-        '403':
+        "403":
           description: Forbidden
-        '404':
+        "404":
           description: Not found
           content:
             text/plain:
@@ -304,17 +312,19 @@ paths:
       - cookieAuth: []
     put:
       tags:
-        - admin
+      - admin
       summary: Modifica lo studente in base all'id
-      description: Questo metodo permette di modificare l'utente con id specificato, o di crearne uno nuovo nel caso l'id non sia già in uso. Se si tenta di cambiare l'email con un'altra che è già in uso nel sistema viene restituito un'errore.
+      description: "Questo metodo permette di modificare l'utente con id specificato, o di crearne uno nuovo nel caso l'id non sia già in uso. Se si tenta di cambiare l'email con un'altra che è già in uso nel sistema viene restituito un'errore."
       operationId: updateStudentById
       parameters:
-        - name: id
-          in: path
-          description: Id dello studente
-          required: true
-          schema:
-            type: string
+      - name: id
+        in: path
+        description: Id dello studente
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       requestBody:
         content:
           application/json:
@@ -327,16 +337,16 @@ paths:
             schema:
               $ref: '#/components/schemas/Student'
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             text/plain:
               schema:
                 type: string
                 example: Studente aggiornato/creato
-        '403':
+        "403":
           description: Forbidden
-        '422':
+        "422":
           description: Unprocessable entity
           content:
             text/plain:
@@ -347,30 +357,31 @@ paths:
       - cookieAuth: []
     delete:
       tags:
-        - admin
+      - admin
       summary: Cancella lo studente in base all'id
       description: Questo metodo permette di eliminare lo studente con id specificato. Se non esiste uno studente con tale identificativo la chiamata non ha alcun effetto.
       operationId: deleteStudentById
       parameters:
-        - name: id
-          in: path
-          description: Id dello studente
-          required: true
-          schema:
-            type: string
+      - name: id
+        in: path
+        description: Id dello studente
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             text/plain:
               schema:
                 type: string
                 example: Studente cancellato
-        '403':
+        "403":
           description: Forbidden
       security:
       - cookieAuth: []
-
 components:
   schemas:
     Student:
@@ -385,16 +396,16 @@ components:
         corso:
           type: string
           enum:
-            - Associate
-            - Bachelor
-            - Graduate
-            - Doctorate
+          - Associate
+          - Bachelor
+          - Graduate
+          - Doctorate
         email:
           type: string
           example: mariorossi@gmail.com
         password:
           type: string
-          description: La password deve contenere almeno 8 caratteri, di cui almeno una minuscola, una maiuscola, un numero e un carattere speciale.
+          description: "La password deve contenere almeno 8 caratteri, di cui almeno una minuscola, una maiuscola, un numero e un carattere speciale."
           example: Mario123@
     LoginData:
       type: object
@@ -412,7 +423,7 @@ components:
           type: string
           example: Mario123@
         token:
-          type: string  
+          type: string
           example: VerificationToken
     RecoverEmail:
       type: object
@@ -420,9 +431,8 @@ components:
         email:
           type: string
           example: mariorossi@gmail.com
-      
   securitySchemes:
-    cookieAuth: 
+    cookieAuth:
       type: apiKey
-      in: cookie
       name: JSESSIONID
+      in: cookie

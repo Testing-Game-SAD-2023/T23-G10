@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<title>Registration</title>
+</head>
+<body>
+<h2></h2>
+<div class="container text-center">
+	<br/> <br/> <br/> 
+    <h2>La tua registrazione ha avuto successo!</h2>
+    <h3>Per favore controlla l'email per verificare il tuo account.</h3>     
+</div>
+<script type="text/javascript">
+function doRedirect() {
+	location.href = "/login";
+}
+
+document.write('<div class="text-redirect"> <br/> Ti stiamo reindirizzando alla pagina di login... </div>');
+window.setTimeout("doRedirect()", 4000);
+</script>
+</body>
+<style>
+	.text-redirect {
+		text-align: center;
+		color: black;
+		font-size: 18px;
+	}
+</style>
+</html>

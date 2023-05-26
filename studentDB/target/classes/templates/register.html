@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+	
+	<meta charset="UTF-8">
+	<meta http-equiv="Content-type" content="text/html; charset=UTF-8">
+
+    <title>Registration Form</title>
+</head>
+
+<body>
+	
+<div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card">
+          <h1 class="text-center mt-3 registration-title">
+            <img src="images/Login_logo.png" alt="Logo" class="logo-image">
+           	<br/> 
+           	REGISTRAZIONE
+          </h1>
+		   	
+		    <form id="registration-form" action="register" method="post" class="mt-3">
+		    	
+				<div class="form-group row">
+				    <label for="nome" class="d-none">Nome</label>
+				    <div class="input-group">
+				        <div class="input-group-prepend">
+				            <span class="input-group-text">
+				                <img src="images/Nome.png" alt="Nome" class="icon-image zoomable">
+				            </span>
+				        </div>
+				        <input type="text" class="form-control" id="nome" name="Nome" required autofocus placeholder="Nome">
+				    </div>
+				    <div class="error" id="nome-error"></div> <br/>
+				</div>
+		
+				<div class="form-group row">
+				    <label for="cognome" class="d-none">Cognome</label>
+				    <div class="input-group">
+				        <div class="input-group-prepend">
+				            <span class="input-group-text">
+				                <img src="images/Cognome.png" alt="Cognome" class="icon-image zoomable">
+				            </span>
+				        </div>
+				        <input type="text" class="form-control" id="cognome" name="Cognome" required autofocus placeholder="Cognome">
+				    </div>
+				    <div class="error" id="cognome-error"></div> <br/>
+				</div>
+		
+		        <div class="form-group row">
+				    <label for="email" class="d-none">Email</label>
+				    <div class="input-group">
+				        <div class="input-group-prepend">
+				            <span class="input-group-text">
+				                <img src="images/Email.png" alt="Email" class="icon-image">
+				            </span>
+				        </div>
+				        <input type="email" class="form-control" id="email" name="email" required autofocus placeholder="Email">
+				    </div>
+				    <div class="error" id="email-error"></div> <br/>
+				</div>
+				
+				<div class="form-group row">
+				    <label for="password" class="d-none">Password</label>
+				    <div class="input-group">
+				        <div class="input-group-prepend">
+				            <span class="input-group-text">
+				                <img src="images/Password.png" alt="Password" class="icon-image">
+				            </span>
+				        </div>
+				        <input type="password" class="form-control" id="password" name="password" required autofocus placeholder="Password">
+				    </div>
+				    <div class="error" id="password-error"></div> <br/>
+				</div>
+				
+				<div class="form-group row">
+				    <label for="confirmPassword" class="d-none">Confirm Password</label>
+				    <div class="input-group">
+				        <div class="input-group-prepend">
+				            <span class="input-group-text">
+				                <img src="images/Password.png" alt="Confirm Password" class="icon-image">
+				            </span>
+				        </div>
+				        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required autofocus placeholder="Conferma Password">
+				    </div>
+				    <div class="error" id="confirmPassword-error"></div> <br/>
+				</div>
+		
+				<div class="form-group row">
+				    <label for="corso" class="d-none">Corso</label>
+				    <div class="input-group">
+				        <div class="input-group-prepend">
+				            <span class="input-group-text">
+				                <img src="images/Corso.png" alt="Corso" class="icon-image zoomable">
+				            </span>
+				        </div>
+				        <select class="form-control custom-select select-input" id="corso" name="corso" required>
+				            <option value=""></option>
+							<option value="Associate">Associate</option>
+							<option value="Bachelor">Bachelor</option>
+							<option value="Graduate">Graduate</option>
+							<option value="Doctorate">Doctorate</option>
+				        </select>
+				    </div>
+				</div>
+		
+				<div class="error" id="backend-error"></div> <br/>
+				
+		        <div class="form-group row justify-content-center">
+		            <div class="col-sm-8">
+		                <button type="submit" id="submit" class="btn btn-primary btn-submit">CREA ACCOUNT</button>
+		            </div>
+		        </div>
+		        <div class="form-group row justify-content-center">
+		            <div class="col-sm-8">
+		                <a href="/login" class="text-red d-block text-center">Hai già un account? Login</a>
+		            </div>
+		        </div>        
+		    </form>
+		</div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  const form = document.querySelector('#registration-form');
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const nome = document.querySelector('#nome');
+    const cognome = document.querySelector('#cognome');
+    const email = document.querySelector('#email');
+    const password = document.querySelector('#password');
+    const confirmPassword = document.querySelector('#confirmPassword');	
+
+    // Clear any existing errors
+    clearErrors();
+
+    // Validate the name and email using regular expressions
+    const nameRegex = /^[a-zA-Z ]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!nameRegex.test(nome.value)) {
+      showError('Per favore inserisci un nome corretto.', 'nome');
+      return;
+    }
+	
+    if (!nameRegex.test(cognome.value)) {
+        showError('Per favore inserisci un cognome corretto.', 'cognome');
+        return;
+      }
+    
+    if (!emailRegex.test(email.value)) {
+      showError('Per favore inserisci un indirizzo email valido.', 'email');
+      return;
+    }
+	
+    if (!validatePassword(password.value)) {
+    	showError('La password deve contenere almeno 8 caratteri di cui una minuscola'
+    			+ ', una maiuscola e un carattere speciale.','password');
+    	return;
+    }
+    
+    if(password.value!=confirmPassword.value) {
+    	showError('Le password inserite non coincidono.', 'confirmPassword');
+        return;
+    }
+    
+    // Submit the form
+    try {
+      const response = await fetch(form.action, {
+        method: form.method,
+        body: new FormData(form)
+      });
+      
+      if (!response.ok) {
+        const message = await response.text();
+        showError(message,'backend');
+        return;
+      }
+      else {
+    	  const message = await response.text();
+    	  document.write(message);
+      }
+      	
+      
+    } catch (error) {
+      showError(error.message);
+    }
+  });
+  
+  function validatePassword(password) {  
+	  const lowerCaseRegex = /[a-z]/;
+	  const upperCaseRegex = /[A-Z]/;
+	  const specialCharRegex = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/;
+	  if (password.length < 8 ||
+	      !lowerCaseRegex.test(password) ||
+	      !upperCaseRegex.test(password) ||
+	      !specialCharRegex.test(password)) {
+	    return false;
+	  }
+	  return true;
+  }
+  
+  function clearErrors() {
+    const errors = document.querySelectorAll('.error');
+    errors.forEach((error) => {
+      error.classList.remove('active');
+      error.textContent = '';
+    });
+  }
+
+  function showError(message, field) {
+    if (field) {
+      const errorElement = document.querySelector(`#${field}-error`);
+      if (errorElement) {
+        errorElement.textContent = message;
+        errorElement.classList.add('active');
+        return;
+      }
+    }
+    alert(message);
+  }
+</script>
+</body>
+
+<style>
+  .error {
+    display: none;
+    color: red;
+    font-size: 14px;
+  }
+
+  .error.active {
+    display: block;
+  }
+  
+          body {
+            background-image: url("images/background.jpg");
+            background-size: cover;
+            font-family: 'Nunito', Arial, sans-serif;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        input.form-control,
+        select.form-control,
+        .select2-selection--single {
+            border-radius: 20px;                                          
+        }
+
+        .select2-container .select2-selection--single {
+            height: 40px !important;
+            line-height: 30px !important;
+            border-radius: 20px;
+           	border-radius: 0px 20px 20px 0px;
+		    border-right: none;
+            text-shadow:none;    
+            font-weight: 300;
+            letter-spacing:0;
+		    display: flex;
+		    align-items: center;
+        }
+
+		.select2-container--default .select2-selection--single .select2-selection__placeholder {
+		  color: #495057;
+		}
+		/* Cambia il colore del testo dei placeholder nei campi di input vuoti */
+		input.form-control::placeholder,
+		select.form-control::placeholder {
+		    color: #495057;
+		}
+
+        .btn-primary {
+            background-color: #3ba8e7;
+            border-color: #3ba8e7;
+            border-radius: 20px; /* Rende i bordi più arrotondati */
+            width: 100%;
+            
+        }
+        
+        .btn-primary:hover {
+            background-color: #2597d9;
+            border-color: #2597d9;
+        }
+		/* Colore del testo per il link "Already have an account? Login" */
+        .text-red {
+            color: #cc0000; /* Imposta il colore rosso */
+        }
+	    /* Stile per il titolo "SIGN UP" */
+	    .registration-title {
+	      /* Blu chiaro */
+	      color: #2597d9;
+	      /* Modifica la dimensione del font*/
+	      font-size: 46px;
+	      /* Imposta lo spessore del font */
+	      font-weight: 700;
+	      /* Centra il testo */
+	      text-align: center;
+	      /* Imposta l'altezza della riga */
+	      line-height: 1.2;
+	      /* Imposta la distanza inferiore dal titolo agli altri elementi */
+	      margin-bottom: 20px;	      
+	    }
+        .logo-image {
+		    width: 60px; /* Modifica la larghezza dell'immagine */
+		    height: auto; /* Imposta l'altezza sull'auto per mantenere le proporzioni originali */
+		    margin-left: 10px; /* Aggiungi un margine a sinistra per separare l'immagine dal testo */
+		}
+		.select2-container--default .select2-results__option--highlighted {
+			background-color: #2597d9 !important;
+			color: #cc0000 !important;
+		}
+   		.card {
+   		    /* Imposta la distanza tra la card e l'intestazione della pagina */
+   			margin-top: 50px;
+		    background-color: rgba(255, 255, 255, 0.8);
+		    border-radius: 20px; /* Rende i bordi più arrotondati */
+          	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		    padding: 30px;
+    	}
+	    /* Imposta la larghezza massima del contenitore del form */
+	    .container {
+	      max-width: 1000px;
+	    }
+	    .icon-image {
+		    width: 30px; /* Imposta la larghezza desiderata dell'immagine */
+		    height: 24px; /* Imposta l'altezza desiderata dell'immagine */
+		}
+	    .zoomable {
+	        transform: scale(1.6); /* Imposta la scala di trasformazione predefinita per lo zoom */
+	    }
+  
+  
+</style>
+
+</html>

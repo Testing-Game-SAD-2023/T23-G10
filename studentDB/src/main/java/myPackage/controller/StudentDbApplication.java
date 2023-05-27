@@ -29,7 +29,7 @@ public class StudentDbApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(StudentDbApplication.class, args);
 	}
-	//
+	
 	@Bean
 	public void initDatabase() {
 		Student admin = new Student();

@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -16,7 +17,7 @@ import myPackage.repository.StudentRepository;
 @EntityScan("myPackage.entity") 
 @ComponentScan({"myPackage"})
 @EnableJpaRepositories("myPackage.repository")
-
+@EnableScheduling
 public class StudentDbApplication {
 	
 	@Autowired

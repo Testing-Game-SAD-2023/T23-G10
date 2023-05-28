@@ -1,6 +1,6 @@
 package myPackage.entity;
 
-public class registrationData {
+public class RegistrationData {
 	
 	private String nome;
 	private String cognome;
@@ -8,6 +8,16 @@ public class registrationData {
 	private String password;
 	private String confirmPassword;
 	private String corso;
+	
+	public RegistrationData(String nome, String cognome, String email, String password, String confirmPassword,
+			String corso) {
+		this.nome = nome;
+		this.cognome = cognome;
+		this.email = email;
+		this.password = password;
+		this.confirmPassword = confirmPassword;
+		this.corso = corso;
+	}
 	
 	public String getNome() {
 		return nome;

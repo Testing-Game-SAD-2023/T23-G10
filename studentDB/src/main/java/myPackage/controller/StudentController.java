@@ -17,7 +17,7 @@ import org.springframework.mail.MailSendException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,19 +30,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import myPackage.entity.Corso;
 import myPackage.entity.Student;
-import myPackage.entity.registrationData;
+import myPackage.entity.RegistrationData;
 import myPackage.service.MyUserDetails;
 import myPackage.service.MyUserDetailsService;
 import myPackage.exception.StudentException;
 
 @RestController
-class StudentController {
+public class StudentController {
 	
 	@Autowired
 	private MyUserDetailsService userDetailsService;
 	
 	@Autowired
-	private BCryptPasswordEncoder passwordEncoder;
+	private PasswordEncoder passwordEncoder;
 	
 	//Public//////////////////
 	
@@ -89,7 +89,7 @@ class StudentController {
 	}
 	
 	@PostMapping(value="/register", produces="text/html")
-	public String register(@ModelAttribute registrationData data,HttpServletRequest request) {	
+	public String register(@ModelAttribute RegistrationData data,HttpServletRequest request) {	
 		
 		if(!checkRegistrationData(data)) 
 			throw new StudentException("I dati inseriti non sono corretti.");
@@ -156,7 +156,7 @@ class StudentController {
         return content;
 	}
 	
-	private boolean checkRegistrationData(registrationData data) {	
+	private boolean checkRegistrationData(RegistrationData data) {	
 		
 		//Controllo su nome e cognome
 		String nome = data.getNome();

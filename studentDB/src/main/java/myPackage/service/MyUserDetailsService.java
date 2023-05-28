@@ -44,7 +44,7 @@ public class MyUserDetailsService implements UserDetailsService {
 	public String createStudent(Student student, HttpServletRequest request) throws UnsupportedEncodingException, MessagingException {
 		
 		if(repo.existsByEmail(student.getEmail())) 
-			throw new StudentException("Email già in uso");
+			throw new StudentException("Email già in uso.");
 		
 		student.setCreationTimestamp(LocalDateTime.now());
 		

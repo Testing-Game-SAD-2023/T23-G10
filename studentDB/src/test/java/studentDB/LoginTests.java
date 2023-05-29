@@ -1,10 +1,12 @@
 package studentDB;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.*;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -15,6 +17,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import myPackage.controller.StudentDbApplication;
 import myPackage.entity.Student;
@@ -22,19 +26,26 @@ import myPackage.repository.StudentRepository;
 
 
 @SpringBootTest(classes = StudentDbApplication.class)
-@AutoConfigureMockMvc
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Import({TestConfig.class})
 class LoginTests {
 	
-	@Autowired
 	private MockMvc mockMvc;
 	
 	@Autowired
 	private StudentRepository repo;
-
+	
+	@Autowired
+	private WebApplicationContext context;
+	
 	@BeforeAll
 	private void init() {	
+		
+		mockMvc = MockMvcBuilders
+                .webAppContextSetup(context)
+                .apply(springSecurity())
+                .build();
+		
 		Student testStudent = new Student();
 		testStudent.setEmail("mariorossi@gmail.com");
 		testStudent.setPassword("{noop}Password123@");
@@ -68,7 +79,8 @@ class LoginTests {
 				.user(email)
 				.password(password))
 				.andExpect(status().is(302))
-				.andExpect(redirectedUrl("/login-success"));
+				.andExpect(redirectedUrl("/login-success"))
+				.andExpect(authenticated().withUsername("mariorossi@gmail.com"));
 	}
 	
 	@Test
@@ -80,7 +92,8 @@ class LoginTests {
 				.user(email)
 				.password(password))
 				.andExpect(status().is(302))
-				.andExpect(redirectedUrl("/login?error"));
+				.andExpect(redirectedUrl("/login?error"))
+				.andExpect(unauthenticated());
 	}
 	
 	@Test
@@ -97,7 +110,8 @@ class LoginTests {
 				.user(email)
 				.password(password))
 				.andExpect(status().is(302))
-				.andExpect(redirectedUrl("/login?error"));
+				.andExpect(redirectedUrl("/login?error"))
+				.andExpect(unauthenticated());
 		
 		// Cleanup
 		student.setEnabled(true);
@@ -113,6 +127,7 @@ class LoginTests {
 				.user(email)
 				.password(password))
 				.andExpect(status().is(302))
-				.andExpect(redirectedUrl("/login?error"));
+				.andExpect(redirectedUrl("/login?error"))
+				.andExpect(unauthenticated());
 	}
 }

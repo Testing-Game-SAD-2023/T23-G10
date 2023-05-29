@@ -30,13 +30,14 @@ public class SecurityConfiguration {
 				.antMatchers("/register","/verify","/forgot-password",
 						"/reset-password","/login","/images/**").permitAll()
 				
+				//Admin
+				.antMatchers("/students/**","/h2-console").hasRole("ADMIN")
+				
 				//User
-				.antMatchers("/login-success").authenticated()
 				.antMatchers("/user/{userId}")
 					.access("(hasRole('USER') or hasRole('ADMIN')) and @securityConfiguration.hasUserId(authentication,#userId)")
+				.anyRequest().authenticated()
 				
-				//Admin
-				.anyRequest().hasRole("ADMIN")
 				.and()
 				.formLogin().loginPage("/login").permitAll()
 				.defaultSuccessUrl("/login-success")

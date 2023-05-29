@@ -13,7 +13,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
@@ -120,6 +119,19 @@ class LoginTests {
 	
 	@Test
 	public void login_3() throws Exception {
+		
+		String email = "mario@gmail.com";
+		String password = "Password123@";
+		mockMvc.perform(formLogin("/login")
+				.user(email)
+				.password(password))
+				.andExpect(status().is(302))
+				.andExpect(redirectedUrl("/login?error"))
+				.andExpect(unauthenticated());
+	}
+	
+	@Test
+	public void login_4() throws Exception {
 		
 		String email = null;
 		String password = null;

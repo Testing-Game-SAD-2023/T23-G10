@@ -108,7 +108,7 @@ public class MyUserDetailsService implements UserDetailsService {
         Student student = repo.findByEmail(email);
         if (student == null) 
         	throw new StudentNotFoundException("Impossibile trovare lo studente con email " + email);
-        else if (student.getVerificationCode()!=null)
+        else if (!student.isEnabled())
         	throw new StudentException("Questa email non è stata ancora verificata");
         else { 
         	student.setResetPasswordToken(token);

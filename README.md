@@ -3,6 +3,7 @@ La documentazione dell'API è consultabile al link: https://app.swaggerhub.com/a
 Se il link non funzionasse è comunque possibile visualizzare la documentazione attraverso il file APIdoc.html nella cartella doc. <br/> <br/>
 
 Per importare il progetto su Eclipse: Import->Maven->Existing Maven Projects e selezionare la cartella studentDB come root o tramite clone. <br/>
+Se le dipendenze non dovessero essere risolte automaticamente si può provare, nel file pom.xml, la seguente procedura: tasto destro-> Maven -> Update Project. <br/>
 Per avviare il server eseguire il file StudentDBApplication.java . <br/>
 
 Il sistema è accessibile mediante http su porto 8080 o https su porto 8443.

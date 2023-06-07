@@ -51,7 +51,7 @@ class ForgotPasswordTests {
 	@Test
 	public void getForgotPasswordForm() throws Exception {
 		
-		String expectedResponse = util.readHtml("classpath:templates/forgot_password_form.html");
+		String expectedResponse = util.readHtml("templates/forgot_password_form.html");
 		mockMvc.perform(get("/forgot-password"))
 				.andExpect(status().isOk())
 				.andExpect(content().string(expectedResponse));
@@ -76,7 +76,7 @@ class ForgotPasswordTests {
 		
 		// Post a reset-password
 		String newPassword = "Password321@";
-		expectedResponse = util.readHtml("classpath:templates/password_changed.html");
+		expectedResponse = util.readHtml("templates/password_changed.html");
 		mockMvc.perform(post("/reset-password")
 				.param("password", newPassword)
 				.param("confirmPassword", newPassword)

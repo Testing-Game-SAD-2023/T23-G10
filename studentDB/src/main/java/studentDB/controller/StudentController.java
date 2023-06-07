@@ -2,7 +2,9 @@ package studentDB.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -14,7 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.mail.MailSendException;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -49,7 +53,7 @@ public class StudentController {
 	@GetMapping(value="/login", produces="text/html")
 	public String getLoginForm(HttpServletRequest request) {
 		
-		String content = readHtml("classpath:templates/login.html");
+		String content = readHtml("templates/login.html");
 		
 		boolean logout = request.getParameterMap().containsKey("logout");
 		if(logout) 
@@ -85,7 +89,7 @@ public class StudentController {
 	
 	@GetMapping(value="/register", produces="text/html")
 	public String getRegisterForm() {
-		return readHtml("classpath:templates/register.html");
+		return readHtml("templates/register.html");
 	}
 	
 	@PostMapping(value="/register", produces="text/html")
@@ -106,16 +110,16 @@ public class StudentController {
 					+ "Controlla che l'indirizzo email inserito sia valido.");
 		}
 	
-		return readHtml("classpath:templates/RegistrationSuccess.html");
+		return readHtml("templates/RegistrationSuccess.html");
 	}
 	
 	@GetMapping(value="/verify", produces="text/html")
 	public String verifyUser(@Param("code") String code) {
 		
 	    if(userDetailsService.verify(code)) 
-	    	return readHtml("classpath:templates/verify_success.html");
+	    	return readHtml("templates/verify_success.html");
 	    else 
-			return readHtml("classpath:templates/verify_fail.html");
+			return readHtml("templates/verify_fail.html");
 	}
 	
 	//Admin///////////////////
@@ -144,16 +148,17 @@ public class StudentController {
 	//Util////////////////////
 	
 	private String readHtml(String path) {
-		File file;
+		
 		String content = "";
+		
 		try {
-			file = ResourceUtils.getFile(path);
-			content = new String(Files.readAllBytes(file.toPath()));
-		} catch (IOException e) {
-			e.printStackTrace();
+			InputStream resource = new ClassPathResource(path).getInputStream();
+			content = new String(resource.readAllBytes(), StandardCharsets.UTF_8);
+		} catch (IOException e1) {
+			e1.printStackTrace();
 		}
 		
-        return content;
+		return content;
 	}
 	
 	private boolean checkRegistrationData(RegistrationData data) {	

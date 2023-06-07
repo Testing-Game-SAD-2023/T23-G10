@@ -32,7 +32,7 @@ public class RegistrationTests {
 	@Test
 	public void getRegistrationForm() throws Exception {
 		
-		String expectedResponse = util.readHtml("classpath:templates/register.html");
+		String expectedResponse = util.readHtml("templates/register.html");
 		mockMvc.perform(get("/register"))
 				.andExpect(status().isOk())
 				.andExpect(content().string(expectedResponse));
@@ -46,7 +46,7 @@ public class RegistrationTests {
 				"Mario","Rossi","mariorossi@gmail.com","Password123@","Password123@",
 				Corso.Associate.toString());
 		
-		String expectedResponse = util.readHtml("classpath:templates/RegistrationSuccess.html");
+		String expectedResponse = util.readHtml("templates/RegistrationSuccess.html");
 		mockMvc.perform(post("/register")
 					.flashAttr("registrationData", data))
 					.andExpect(status().isOk())
@@ -59,7 +59,7 @@ public class RegistrationTests {
 		String verificationCode = student.getVerificationCode();
 		assert(verificationCode != null);
 		
-		expectedResponse = util.readHtml("classpath:templates/verify_success.html");
+		expectedResponse = util.readHtml("templates/verify_success.html");
 		mockMvc.perform(get("/verify")
 				.param("code", verificationCode))
 				.andExpect(status().isOk())

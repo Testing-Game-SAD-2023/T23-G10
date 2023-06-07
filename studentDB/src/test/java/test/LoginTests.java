@@ -63,7 +63,7 @@ class LoginTests {
 	@Test
 	public void getLoginForm() throws Exception {
 		
-		String expectedResponse = util.readHtml("classpath:templates/login.html");
+		String expectedResponse = util.readHtml("templates/login.html");
 		mockMvc.perform(get("/login"))
 				.andExpect(status().isOk())
 				.andExpect(content().string(expectedResponse));

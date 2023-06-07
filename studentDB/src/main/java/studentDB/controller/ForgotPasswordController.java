@@ -2,12 +2,15 @@ package studentDB.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.repository.query.Param;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.ResourceUtils;
@@ -31,7 +34,7 @@ public class ForgotPasswordController {
 	
 	@GetMapping(value="/forgot-password", produces="text/html")
     public String getForgotPasswordForm() {
-		return readHtml("classpath:templates/forgot_password_form.html");
+		return readHtml("templates/forgot_password_form.html");
     }
  
     @PostMapping("/forgot-password")
@@ -48,14 +51,14 @@ public class ForgotPasswordController {
     public String getResetPasswordForm(@Param("token") String token) {
     	
     	if (token == null) 
-            return readHtml("classpath:templates/invalid_token.html");
+            return readHtml("templates/invalid_token.html");
     	
     	Student student = userDetailsService.getByResetPasswordToken(token);
          
         if (student == null) 
-            return readHtml("classpath:templates/invalid_token.html");
+            return readHtml("templates/invalid_token.html");
         
-        String page = readHtml("classpath:templates/reset_password_form.html");
+        String page = readHtml("templates/reset_password_form.html");
     	return page.replace("[[token]]", token);
     }
      
@@ -72,24 +75,25 @@ public class ForgotPasswordController {
         
         Student student = userDetailsService.getByResetPasswordToken(token);
         if (student == null)         
-        	return readHtml("classpath:templates/invalid_token.html");
+        	return readHtml("templates/invalid_token.html");
         
         userDetailsService.updatePassword(student, passwordEncoder.encode(password));
              
-        return readHtml("classpath:templates/password_changed.html");
+        return readHtml("templates/password_changed.html");
     }
 	
 	private String readHtml(String path) {
-		File file;
+		
 		String content = "";
+		
 		try {
-			file = ResourceUtils.getFile(path);
-			content = new String(Files.readAllBytes(file.toPath()));
-		} catch (IOException e) {
-			e.printStackTrace();
+			InputStream resource = new ClassPathResource(path).getInputStream();
+			content = new String(resource.readAllBytes(), StandardCharsets.UTF_8);
+		} catch (IOException e1) {
+			e1.printStackTrace();
 		}
 		
-        return content;
+		return content;
 	}
 	
 	private boolean checkPassword(String password) {

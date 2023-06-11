@@ -1,13 +1,10 @@
 package test;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.util.ResourceUtils;
 
 import studentDB.entity.RegistrationData;
 import studentDB.entity.Student;

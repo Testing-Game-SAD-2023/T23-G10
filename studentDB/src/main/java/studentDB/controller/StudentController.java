@@ -61,26 +61,14 @@ public class StudentController {
 		return content;
 	}
 	
-	// Questo nell'ipotesi che dopo il login venga effettuato un accesso
-	// all'url user/id dove l'id è appunto relativo all'utente che ha effettuato
-	// l'autenticazione. In generale questo metodo deve gestire cosa fare
-	// dopo il login.
 	@GetMapping("/login-success")
-	public void loginSuccess(HttpServletResponse response) {
+	public String loginSuccess(HttpServletResponse response) {
 		MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		String url = "/user/"+ userDetails.getId();
+		Long id = userDetails.getId();
 		
-		try {
-			response.sendRedirect(url);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	//Come prova
-	@GetMapping("/user/{userId}")
-	public String readUserAreaId(@PathVariable Long userId) {
-		return "Area dell'utente " + userId;
+		String content = readHtml("templates/user_area.html");
+		content = content.replace("<<StudentId>>", id.toString());
+		return content;
 	}
 	
 	@GetMapping(value="/register", produces="text/html")

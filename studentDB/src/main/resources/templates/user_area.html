@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Home</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8 col-sm-10">
+            <div class="card mt-5">
+                <div class="card-body">
+                    <div class="text-center mt-3 login-title">
+                    	<img src="images/Login_logo.png" alt="User face" style="width: 100px; height: 100px; border-radius: 50%;">
+   						<div class="text-center mt-3 login-title" id=id></div>
+   					</div>   					
+    
+                    <button onclick="newGame()" class="btn btn-primary btn-block">NUOVA PARTITA</button>
+          			<br/>
+          			<button onclick="gameList()" class="btn btn-primary btn-block">STORICO PARTITE</button>
+                
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+<script>
+    const id = "<<StudentId>>";
+    document.getElementById('id').textContent = "ID STUDENTE: " + id;
+    
+    function newGame() {
+    	location.href = "/newGame/"+id;
+    }
+    
+    function gameList() {
+    	location.href = "/gameList/"+id;
+    }
+</script>  
+  
+<style>
+        body {
+            background-image: url("images/background.jpg");
+            background-size: cover;
+            font-family: 'Nunito', Arial, sans-serif;
+            font-weight: 600; /* Imposta la variazione del font desiderata */
+            letter-spacing: 0.1em; /* Aggiunge spaziatura tra le lettere */
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Aggiunge un effetto ombra al testo */
+        }
+        
+        .card {
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 20px; /* Rende i bordi più arrotondati */
+        }
+        
+        .card-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .card-body {
+            padding: 30px;
+        }
+        
+        .form-control {
+            border: 1px solid #ddd;
+            border-radius: 20px; /* Rende i bordi più arrotondati */
+        }
+        
+        .btn-primary {
+            background-color: #3ba8e7;
+            border-color: #3ba8e7;
+            border-radius: 20px; /* Rende i bordi più arrotondati */
+            
+        }
+        
+        .btn-primary:hover {
+            background-color: #2597d9;
+            border-color: #2597d9;
+            
+        }
+        
+        .text-red {
+            color: #cc0000; /* Imposta il colore rosso desiderato */
+        }
+        
+        .text-red-right {
+        	color: #cc0000;
+        	position: relative; 
+        	left: 5px;
+        }
+        
+        .login-title {
+	      /* Blu chiaro */
+	      color: #2597d9;
+	      /* Modifica la dimensione del font*/
+	      font-size: 46px;
+	      /* Imposta lo spessore del font */
+	      font-weight: 700;
+	      /* Centra il testo */
+	      text-align: center;
+	      /* Imposta l'altezza della riga */
+	      line-height: 1.2;
+	      /* Imposta la distanza inferiore dal titolo agli altri elementi */
+	      margin-bottom: 20px;	      
+	    }
+	    
+</style> 
+</html>

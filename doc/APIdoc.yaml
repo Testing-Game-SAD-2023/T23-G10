@@ -137,12 +137,14 @@ paths:
     get:
       tags:
       - login
-      summary: Fai qualcosa dopo il login
-      description: Questo metodo viene invocato automaticamente dopo una corretta autenticazione. L'implementazione dipende dall'interfacciamento con i gruppi che utilizzano la funzionalità di login. Può ad esempio restituire un semplice messaggio di conferma o fare un redirect verso l'area dell'utente loggato (Es. /user/id).
+      summary: Accedi all'area personale dello studente
+      description: Questo metodo viene invocato di default dopo una corretta autenticazione. Restituisce una pagina html che consente allo studente loggato di avviare una nuova partita o visualizzare lo storico delle partite.
       operationId: loginSuccess
       responses:
         "200":
           description: Successful operation
+          content:
+            text/html: {}
   /logout:
     get:
       tags:

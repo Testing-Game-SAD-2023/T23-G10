@@ -4280,12 +4280,12 @@ except ApiException as e:
                       <article id="api-Login-loginSuccess-0" data-group="User" data-name="loginSuccess" data-version="0">
                         <div class="pull-left">
                           <h1>loginSuccess</h1>
-                          <p>Fai qualcosa dopo il login</p>
+                          <p>Accedi all&#x27;area personale dello studente</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
                         <p></p>
-                        <p class="marked">Questo metodo viene invocato automaticamente dopo una corretta autenticazione. L&#x27;implementazione dipende dall&#x27;interfacciamento con i gruppi che utilizzano la funzionalità di login. Può ad esempio restituire un semplice messaggio di conferma o fare un redirect verso l&#x27;area dell&#x27;utente loggato (Es. /user/id).</p>
+                        <p class="marked">Questo metodo viene invocato di default dopo una corretta autenticazione. Restituisce una pagina html che consente allo studente loggato di avviare una nuova partita o visualizzare lo storico delle partite.</p>
                         <p></p>
                         <br />
                         <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/login-success</span></code></pre>
@@ -4309,6 +4309,7 @@ except ApiException as e:
                         <div class="tab-content">
                           <div class="tab-pane active" id="examples-Login-loginSuccess-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
+-H "Accept: text/html"\
 "//login-success"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Login-loginSuccess-0-java">
@@ -4359,7 +4360,7 @@ public class LoginApiExample {
                               <pre class="prettyprint"><code class="language-cpp">
 LoginApi *apiInstance = [[LoginApi alloc] init];
 
-// Fai qualcosa dopo il login
+// Accedi all'area personale dello studente
 [apiInstance loginSuccessWithCompletionHandler: 
               ^(NSError* error) {
                             if (error) {
@@ -4405,7 +4406,7 @@ namespace Example
 
             try
             {
-                // Fai qualcosa dopo il login
+                // Accedi all'area personale dello studente
                 apiInstance.loginSuccess();
             }
             catch (Exception e)
@@ -4458,7 +4459,7 @@ from pprint import pprint
 api_instance = swagger_client.LoginApi()
 
 try: 
-    # Fai qualcosa dopo il login
+    # Accedi all'area personale dello studente
     api_instance.login_success()
 except ApiException as e:
     print("Exception when calling LoginApi->loginSuccess: %s\n" % e)</code></pre>

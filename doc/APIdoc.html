@@ -793,8 +793,14 @@
                       <a href="#api-ForgotPassword-processResetPassword">processResetPassword</a>
                     </li>
                   <li class="nav-header" data-group="Login"><a href="#api-Login">API Methods - Login</a></li>
+                    <li data-group="Login" data-name="getAuthenticatedId" class="">
+                      <a href="#api-Login-getAuthenticatedId">getAuthenticatedId</a>
+                    </li>
                     <li data-group="Login" data-name="getLoginForm" class="">
                       <a href="#api-Login-getLoginForm">getLoginForm</a>
+                    </li>
+                    <li data-group="Login" data-name="getUserAreaId" class="">
+                      <a href="#api-Login-getUserAreaId">getUserAreaId</a>
                     </li>
                     <li data-group="Login" data-name="login" class="">
                       <a href="#api-Login-login">login</a>
@@ -831,7 +837,7 @@
             <h2 id="welcome-to-apidoc">API and SDK Documentation</h2>
               <div class="app-desc">Version: 1.0</div>
             <hr>
-            <div>Questa è l'API per il database degli studenti. Le funzionalità offerte sono quelle di registrazione, login, logout e recupero della password, accessibili attraverso chiamate GET a /register, /login, /logout e /forgot-password. Sono presenti altri metodi pubblici che però vengono utilizzati automaticamente dalle pagine html fornite, per cui non dovrebbero essere invocati esplicitamente (o comunque la loro chiamata non avrebbe particolari effetti sul sistema nella maggior parte dei casi). Sono anche presenti alcune funzionalità, accessibili solo dall'utente admin, che consentono la gestione del database come visualizzare la lista degli studenti registrati o in generale effettuare operazioni CRUD.</div>
+            <div>Questa è l'API per il database degli studenti. Le funzionalità fondamentali offerte sono quelle di registrazione, login, logout e recupero della password, accessibili attraverso chiamate GET a /register, /login, /logout e /forgot-password. Dopo il login di default si accede all'area personale dell'utente che gli consente di avviare una nuova partita o visualizzare lo storico delle partite giocate. Se si volesse richiamare esplicitamente questa pagina si può effettuare una chiamata GET a /user/{userId}; ovviamente ogni utente può accedere solo alla propria area riservata. Inoltre se si volesse ricavare l'id dell'utente loggato, ad esempio per proteggere l'accesso ai propri metodi, è a disposizione la chiamata a /authenticated-id che restituisce l'id dell'utente autenticato, o -1 se la sessione non è valida. L'autenticazione è gestita attraverso il cookie JSESSIONID; per far sì che tale cookie venga scambiato correttamente sulle diverse applicazioni presenti sul server, i componenti che vogliono utilizzare le nostre funzionalità dovrebbero settare il path del cookie a &quot;/&quot; per evitare eventuali problemi. Sono presenti altri metodi pubblici che però vengono utilizzati automaticamente dalle pagine html fornite, per cui non dovrebbero essere invocati esplicitamente (o comunque la loro chiamata non avrebbe particolari effetti sul sistema nella maggior parte dei casi). Sono anche presenti alcune funzionalità, accessibili solo dall'utente admin, che consentono la gestione del database come visualizzare la lista degli studenti registrati o in generale effettuare operazioni CRUD.</div>
           </div>
         </div>
         <div id="sections">
@@ -3693,6 +3699,262 @@ except ApiException as e:
                   </section>
                 <section id="api-Login">
                   <h1>Login</h1>
+                    <div id="api-Login-getAuthenticatedId">
+                      <article id="api-Login-getAuthenticatedId-0" data-group="User" data-name="getAuthenticatedId" data-version="0">
+                        <div class="pull-left">
+                          <h1>getAuthenticatedId</h1>
+                          <p>Ottieni l&#x27;id dell&#x27;utente autenticato</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked">L&#x27;invocazione di questo metodo permette di ottenere l&#x27;id dell&#x27;utente autenticato in base al cookie di sessione JSESSIONID. Restituisce la stringa &quot;-1&quot; se la sessione non è valida.</p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/authenticated-id</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-Login-getAuthenticatedId-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Login-getAuthenticatedId-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Login-getAuthenticatedId-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Login-getAuthenticatedId-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Login-getAuthenticatedId-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Login-getAuthenticatedId-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Login-getAuthenticatedId-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Login-getAuthenticatedId-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Login-getAuthenticatedId-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Login-getAuthenticatedId-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Login-getAuthenticatedId-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-Login-getAuthenticatedId-0-curl">
+                           <pre class="prettyprint"><code class="language-bsh">curl -X GET\
+\
+-H "Accept: string"\
+"//authenticated-id?"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-Login-getAuthenticatedId-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.LoginApi;
+
+import java.io.File;
+import java.util.*;
+
+public class LoginApiExample {
+
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+        // Configure API key authorization: cookieAuth
+        ApiKeyAuth cookieAuth = (ApiKeyAuth) defaultClient.getAuthentication("cookieAuth");
+        cookieAuth.setApiKey("YOUR API KEY");
+        // Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+        //cookieAuth.setApiKeyPrefix("Token");
+
+        LoginApi apiInstance = new LoginApi();
+        try {
+            apiInstance.getAuthenticatedId();
+        } catch (ApiException e) {
+            System.err.println("Exception when calling LoginApi#getAuthenticatedId");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-Login-getAuthenticatedId-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.LoginApi;
+
+public class LoginApiExample {
+
+    public static void main(String[] args) {
+        LoginApi apiInstance = new LoginApi();
+        try {
+            apiInstance.getAuthenticatedId();
+        } catch (ApiException e) {
+            System.err.println("Exception when calling LoginApi#getAuthenticatedId");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-Login-getAuthenticatedId-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-Login-getAuthenticatedId-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">Configuration *apiConfig = [Configuration sharedConfig];
+// Configure API key authorization: (authentication scheme: cookieAuth)
+[apiConfig setApiKey:@"YOUR_API_KEY" forApiKeyIdentifier:@"JSESSIONID"];
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+//[apiConfig setApiKeyPrefix:@"Bearer" forApiKeyIdentifier:@"JSESSIONID"];
+
+LoginApi *apiInstance = [[LoginApi alloc] init];
+
+// Ottieni l'id dell'utente autenticato
+[apiInstance getAuthenticatedIdWithCompletionHandler: 
+              ^(NSError* error) {
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Login-getAuthenticatedId-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var StudentDbOpenApi30 = require('student_db___open_api_30');
+var defaultClient = StudentDbOpenApi30.ApiClient.instance;
+
+// Configure API key authorization: cookieAuth
+var cookieAuth = defaultClient.authentications['cookieAuth'];
+cookieAuth.apiKey = "YOUR API KEY"
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//cookieAuth.apiKeyPrefix['JSESSIONID'] = "Token"
+
+var api = new StudentDbOpenApi30.LoginApi()
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully.');
+  }
+};
+api.getAuthenticatedId(callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-Login-getAuthenticatedId-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-Login-getAuthenticatedId-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class getAuthenticatedIdExample
+    {
+        public void main()
+        {
+
+            // Configure API key authorization: cookieAuth
+            Configuration.Default.ApiKey.Add("JSESSIONID", "YOUR_API_KEY");
+            // Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+            // Configuration.Default.ApiKeyPrefix.Add("JSESSIONID", "Bearer");
+
+            var apiInstance = new LoginApi();
+
+            try
+            {
+                // Ottieni l'id dell'utente autenticato
+                apiInstance.getAuthenticatedId();
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling LoginApi.getAuthenticatedId: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Login-getAuthenticatedId-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+// Configure API key authorization: cookieAuth
+Swagger\Client\Configuration::getDefaultConfiguration()->setApiKey('JSESSIONID', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// Swagger\Client\Configuration::getDefaultConfiguration()->setApiKeyPrefix('JSESSIONID', 'Bearer');
+
+$api_instance = new Swagger\Client\ApiLoginApi();
+
+try {
+    $api_instance->getAuthenticatedId();
+} catch (Exception $e) {
+    echo 'Exception when calling LoginApi->getAuthenticatedId: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Login-getAuthenticatedId-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::LoginApi;
+
+# Configure API key authorization: cookieAuth
+$WWW::SwaggerClient::Configuration::api_key->{'JSESSIONID'} = 'YOUR_API_KEY';
+# uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+#$WWW::SwaggerClient::Configuration::api_key_prefix->{'JSESSIONID'} = "Bearer";
+
+my $api_instance = WWW::SwaggerClient::LoginApi->new();
+
+eval { 
+    $api_instance->getAuthenticatedId();
+};
+if ($@) {
+    warn "Exception when calling LoginApi->getAuthenticatedId: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Login-getAuthenticatedId-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# Configure API key authorization: cookieAuth
+swagger_client.configuration.api_key['JSESSIONID'] = 'YOUR_API_KEY'
+# Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+# swagger_client.configuration.api_key_prefix['JSESSIONID'] = 'Bearer'
+
+# create an instance of the API class
+api_instance = swagger_client.LoginApi()
+
+try: 
+    # Ottieni l'id dell'utente autenticato
+    api_instance.get_authenticated_id()
+except ApiException as e:
+    print("Exception when calling LoginApi->getAuthenticatedId: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+
+
+
+
+                            <div class="methodsubtabletitle">Query parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                            </table>
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - Successful operation </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
                     <div id="api-Login-getLoginForm">
                       <article id="api-Login-getLoginForm-0" data-group="User" data-name="getLoginForm" data-version="0">
                         <div class="pull-left">
@@ -3956,6 +4218,308 @@ except ApiException as e:
 
                           <h2>Responses</h2>
                             <h3> Status: 200 - Successful operation </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
+                    <div id="api-Login-getUserAreaId">
+                      <article id="api-Login-getUserAreaId-0" data-group="User" data-name="getUserAreaId" data-version="0">
+                        <div class="pull-left">
+                          <h1>getUserAreaId</h1>
+                          <p>Accedi all&#x27;area personale dello studente</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked">Questo metodo restituisce la pagina personale dello studente con id specificato, che gli consente di avviare una nuova partita o visualizzare lo storico delle partite.</p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/user/{userId}</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-Login-getUserAreaId-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Login-getUserAreaId-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Login-getUserAreaId-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Login-getUserAreaId-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Login-getUserAreaId-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Login-getUserAreaId-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Login-getUserAreaId-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Login-getUserAreaId-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Login-getUserAreaId-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Login-getUserAreaId-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Login-getUserAreaId-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-Login-getUserAreaId-0-curl">
+                           <pre class="prettyprint"><code class="language-bsh">curl -X GET\
+\
+-H "Accept: text/html"\
+"//user/{userId}?"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-Login-getUserAreaId-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.LoginApi;
+
+import java.io.File;
+import java.util.*;
+
+public class LoginApiExample {
+
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+        // Configure API key authorization: cookieAuth
+        ApiKeyAuth cookieAuth = (ApiKeyAuth) defaultClient.getAuthentication("cookieAuth");
+        cookieAuth.setApiKey("YOUR API KEY");
+        // Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+        //cookieAuth.setApiKeyPrefix("Token");
+
+        LoginApi apiInstance = new LoginApi();
+        String userId = userId_example; // String | Id dello studente
+        try {
+            apiInstance.getUserAreaId(userId);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling LoginApi#getUserAreaId");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-Login-getUserAreaId-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.LoginApi;
+
+public class LoginApiExample {
+
+    public static void main(String[] args) {
+        LoginApi apiInstance = new LoginApi();
+        String userId = userId_example; // String | Id dello studente
+        try {
+            apiInstance.getUserAreaId(userId);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling LoginApi#getUserAreaId");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-Login-getUserAreaId-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-Login-getUserAreaId-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">Configuration *apiConfig = [Configuration sharedConfig];
+// Configure API key authorization: (authentication scheme: cookieAuth)
+[apiConfig setApiKey:@"YOUR_API_KEY" forApiKeyIdentifier:@"JSESSIONID"];
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+//[apiConfig setApiKeyPrefix:@"Bearer" forApiKeyIdentifier:@"JSESSIONID"];
+String *userId = userId_example; // Id dello studente
+
+LoginApi *apiInstance = [[LoginApi alloc] init];
+
+// Accedi all'area personale dello studente
+[apiInstance getUserAreaIdWith:userId
+              completionHandler: ^(NSError* error) {
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Login-getUserAreaId-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var StudentDbOpenApi30 = require('student_db___open_api_30');
+var defaultClient = StudentDbOpenApi30.ApiClient.instance;
+
+// Configure API key authorization: cookieAuth
+var cookieAuth = defaultClient.authentications['cookieAuth'];
+cookieAuth.apiKey = "YOUR API KEY"
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//cookieAuth.apiKeyPrefix['JSESSIONID'] = "Token"
+
+var api = new StudentDbOpenApi30.LoginApi()
+var userId = userId_example; // {{String}} Id dello studente
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully.');
+  }
+};
+api.getUserAreaId(userId, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-Login-getUserAreaId-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-Login-getUserAreaId-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class getUserAreaIdExample
+    {
+        public void main()
+        {
+
+            // Configure API key authorization: cookieAuth
+            Configuration.Default.ApiKey.Add("JSESSIONID", "YOUR_API_KEY");
+            // Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+            // Configuration.Default.ApiKeyPrefix.Add("JSESSIONID", "Bearer");
+
+            var apiInstance = new LoginApi();
+            var userId = userId_example;  // String | Id dello studente
+
+            try
+            {
+                // Accedi all'area personale dello studente
+                apiInstance.getUserAreaId(userId);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling LoginApi.getUserAreaId: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Login-getUserAreaId-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+// Configure API key authorization: cookieAuth
+Swagger\Client\Configuration::getDefaultConfiguration()->setApiKey('JSESSIONID', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// Swagger\Client\Configuration::getDefaultConfiguration()->setApiKeyPrefix('JSESSIONID', 'Bearer');
+
+$api_instance = new Swagger\Client\ApiLoginApi();
+$userId = userId_example; // String | Id dello studente
+
+try {
+    $api_instance->getUserAreaId($userId);
+} catch (Exception $e) {
+    echo 'Exception when calling LoginApi->getUserAreaId: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Login-getUserAreaId-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::LoginApi;
+
+# Configure API key authorization: cookieAuth
+$WWW::SwaggerClient::Configuration::api_key->{'JSESSIONID'} = 'YOUR_API_KEY';
+# uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+#$WWW::SwaggerClient::Configuration::api_key_prefix->{'JSESSIONID'} = "Bearer";
+
+my $api_instance = WWW::SwaggerClient::LoginApi->new();
+my $userId = userId_example; # String | Id dello studente
+
+eval { 
+    $api_instance->getUserAreaId(userId => $userId);
+};
+if ($@) {
+    warn "Exception when calling LoginApi->getUserAreaId: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Login-getUserAreaId-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# Configure API key authorization: cookieAuth
+swagger_client.configuration.api_key['JSESSIONID'] = 'YOUR_API_KEY'
+# Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+# swagger_client.configuration.api_key_prefix['JSESSIONID'] = 'Bearer'
+
+# create an instance of the API class
+api_instance = swagger_client.LoginApi()
+userId = userId_example # String | Id dello studente
+
+try: 
+    # Accedi all'area personale dello studente
+    api_instance.get_user_area_id(userId)
+except ApiException as e:
+    print("Exception when calling LoginApi->getUserAreaId: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+                            <div class="methodsubtabletitle">Path parameters</div>
+                            <table id="methodsubtable">
+                                <tr>
+                                  <th width="150px">Name</th>
+                                  <th>Description</th>
+                                </tr>
+                                  <tr><td style="width:150px;">userId*</td>
+                                  <td>
+                                  
+                                  
+                                      <div id="d2e199_getUserAreaId_userId">
+                                          <div class="json-schema-view">
+                                              <div class="primitive">
+                                                  <span class="type">
+                                                      String
+                                                  </span>
+                                  
+                                                      <div class="inner description">
+                                                          Id dello studente
+                                                      </div>
+                                              </div>
+                                                  <div class="inner required">
+                                                      Required
+                                                  </div>
+                                          </div>
+                                      </div>
+                                  </td>
+                                  </tr>
+                            </table>
+
+
+
+
+                            <div class="methodsubtabletitle">Query parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                            </table>
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - Successful operation </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                            </div>
+
+                            <h3> Status: 403 - Forbidden </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
                             </ul>
@@ -4280,12 +4844,12 @@ except ApiException as e:
                       <article id="api-Login-loginSuccess-0" data-group="User" data-name="loginSuccess" data-version="0">
                         <div class="pull-left">
                           <h1>loginSuccess</h1>
-                          <p>Accedi all&#x27;area personale dello studente</p>
+                          <p>Login ha avuto successo</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
                         <p></p>
-                        <p class="marked">Questo metodo viene invocato di default dopo una corretta autenticazione. Restituisce una pagina html che consente allo studente loggato di avviare una nuova partita o visualizzare lo storico delle partite.</p>
+                        <p class="marked">Questo metodo viene invocato di default dopo una corretta autenticazione. Effettua un redirect a /user/{userId} dove userId è l&#x27;identificativo dello studente loggato.</p>
                         <p></p>
                         <br />
                         <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/login-success</span></code></pre>
@@ -4309,7 +4873,6 @@ except ApiException as e:
                         <div class="tab-content">
                           <div class="tab-pane active" id="examples-Login-loginSuccess-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
--H "Accept: text/html"\
 "//login-success"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Login-loginSuccess-0-java">
@@ -4360,7 +4923,7 @@ public class LoginApiExample {
                               <pre class="prettyprint"><code class="language-cpp">
 LoginApi *apiInstance = [[LoginApi alloc] init];
 
-// Accedi all'area personale dello studente
+// Login ha avuto successo
 [apiInstance loginSuccessWithCompletionHandler: 
               ^(NSError* error) {
                             if (error) {
@@ -4406,7 +4969,7 @@ namespace Example
 
             try
             {
-                // Accedi all'area personale dello studente
+                // Login ha avuto successo
                 apiInstance.loginSuccess();
             }
             catch (Exception e)
@@ -4459,7 +5022,7 @@ from pprint import pprint
 api_instance = swagger_client.LoginApi()
 
 try: 
-    # Accedi all'area personale dello studente
+    # Login ha avuto successo
     api_instance.login_success()
 except ApiException as e:
     print("Exception when calling LoginApi->loginSuccess: %s\n" % e)</code></pre>
@@ -4474,7 +5037,7 @@ except ApiException as e:
 
 
                           <h2>Responses</h2>
-                            <h3> Status: 200 - Successful operation </h3>
+                            <h3> Status: 302 - Found </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
                             </ul>

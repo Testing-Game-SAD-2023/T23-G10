@@ -28,7 +28,7 @@ public class SecurityConfiguration {
 		http.authorizeRequests()
 				//Public
 				.antMatchers("/register","/verify","/forgot-password",
-						"/reset-password","/login","/images/**").permitAll()
+						"/reset-password","/login","/images/**","/authenticated-id").permitAll()
 				
 				//Admin
 				.antMatchers("/students/**","/h2-console").hasRole("ADMIN")

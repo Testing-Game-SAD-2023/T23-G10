@@ -15,6 +15,7 @@ public class TLSConfig {
                 // Allow both HTTP and HTTPS access
                 context.setUseHttpOnly(false);
                 context.setSessionCookieName("JSESSIONID");
+                context.setSessionCookiePath("/");
             }
         };
 
@@ -25,7 +26,7 @@ public class TLSConfig {
     private Connector createHTTPConnector() {
         Connector connector = new Connector(TomcatServletWebServerFactory.DEFAULT_PROTOCOL);
         connector.setScheme("http");
-        connector.setPort(8080);
+        connector.setPort(9000);
         return connector;
     }
 }

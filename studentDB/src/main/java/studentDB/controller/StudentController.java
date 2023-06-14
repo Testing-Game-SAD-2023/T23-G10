@@ -12,13 +12,17 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-import org.springframework.mail.MailSendException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.repository.query.Param;
+import org.springframework.mail.MailSendException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -62,14 +66,44 @@ public class StudentController {
 	}
 	
 	@GetMapping("/login-success")
-	public String loginSuccess(HttpServletResponse response) {
+	public void loginSuccess(HttpServletResponse response) {
 		MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		Long id = userDetails.getId();
+		
+		String url = "/user/"+ userDetails.getId();
+		
+		try {
+			response.sendRedirect(url);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@GetMapping("/user/{userId}")
+	public String getUserAreaId(@PathVariable Long userId) {
 		
 		String content = readHtml("templates/user_area.html");
-		content = content.replace("<<StudentId>>", id.toString());
+		content = content.replace("<<StudentId>>", userId.toString());
 		return content;
+		
 	}
+	
+	@GetMapping("/authenticated-id")
+	public String getAuthenticatedId(HttpSession session) {
+
+	    if (session != null) {
+	        SecurityContext securityContext = (SecurityContext) session.getAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY);
+	        if (securityContext != null) {
+	            Authentication authentication = securityContext.getAuthentication();
+	            if (authentication != null && authentication.isAuthenticated()) {
+	            	MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
+	            	String userId = userDetails.getId().toString();
+	                return userId;
+	            }
+	        }
+	    }
+	    return "-1";
+	}
+
 	
 	@GetMapping(value="/register", produces="text/html")
 	public String getRegisterForm() {

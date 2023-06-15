@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class TLSConfig {
-    @Bean
+	@Bean
     public TomcatServletWebServerFactory servletContainer() {
         TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory() {
             @Override
@@ -26,7 +26,7 @@ public class TLSConfig {
     private Connector createHTTPConnector() {
         Connector connector = new Connector(TomcatServletWebServerFactory.DEFAULT_PROTOCOL);
         connector.setScheme("http");
-        connector.setPort(9000);
+        connector.setPort(12345);
         return connector;
     }
 }

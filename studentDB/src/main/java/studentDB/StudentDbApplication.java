@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,6 +19,7 @@ import studentDB.repository.StudentRepository;
 @ComponentScan({"studentDB"})
 @EnableJpaRepositories("studentDB.repository")
 @EnableScheduling
+@PropertySource("file:application.properties")
 public class StudentDbApplication {
 	
 	@Autowired

@@ -2,11 +2,9 @@
 La documentazione dell'API è consultabile al link: https://app.swaggerhub.com/apis-docs/LUCIILARDI/StudentDB/1.0 . <br/>
 Se il link non funzionasse è comunque possibile visualizzare la documentazione attraverso il file APIdoc.html nella cartella doc. <br/> <br/>
 
-Il sistema è accessibile mediante http su porto 9000 o https su porto 8443.
-
 <h2> Installazione </h2>
-L'applicazione è fornita attraverso il file studentDB-0.0.1-SNAPSHOT.jar nella cartella bin. 
-<br/> Per avviarla da terminale: <code>java -jar studentDB-0.0.1-SNAPSHOT.jar</code> <br/>
+L'applicazione è fornita attraverso il file studentDB-0.0.1-SNAPSHOT.jar nella cartella bin. Nella stessa cartella è anche fornito un file di configurazione <code>application.properties</code>; in particolare, le ultime due righe consentono di scegliere il porto su cui avviare il server e se utilizzare https o meno. Ci si assicuri che tale file si trovi nella stessa cartella del file jar. <br/>
+<br/> Per avviare l'applicazione da terminale: <code>java -jar studentDB-0.0.1-SNAPSHOT.jar</code> <br/> <br/>
 E' necessario avere una versione di <code>Java 17</code> o superiore, reperibile su https://www.oracle.com/it/java/technologies/downloads/. 
 <br/> <br/>
 Nel momento in cui si apportasse qualche modifica al sistema, il file jar deve essere rigenerato. Per farlo seguire i seguenti passaggi: <br/> 
@@ -50,10 +48,10 @@ OS name: &quot;mac os x&quot;, version: &quot;10.8.5&quot;, arch: &quot;x86_64&q
 
 <h3> 2) Generazione file jar tramite Maven </h3>
 Aprire il terminale e portarsi nella directory <code>studentDB</code>. Eseguire il seguente comando: 
-<code>mvn clean install</code>. Alla fine del processo verrà generato il file <code>studentDB-0.0.1-SNAPSHOT.jar</code> nella cartella <code>studentDB/target</code>.
+<code>mvn clean install</code>. Alla fine del processo verrà generato il file <code>studentDB-0.0.1-SNAPSHOT.jar</code> nella cartella <code>studentDB/target</code>
 
 <h3> 3) Avvio dell'applicazione </h3>
-Per avviare l'applicazione da terminale portarsi nella directory del file jar precedentemente generato ed eseguire il comando <br/> <code>java -jar studentDB-0.0.1-SNAPSHOT.jar</code> <br/>
+Per avviare l'applicazione da terminale si segua la stessa procedura descritta sopra, ossia si sposti in una stessa directory il file jar precedentemente generato e il file di configurazione fornito ed eseguire il comando <br/> <code>java -jar studentDB-0.0.1-SNAPSHOT.jar</code><br/>
 
 <h2> Se si vuole provare l'applicazione da Eclipse </h2>
 Per importare il progetto su Eclipse: Import->Maven->Existing Maven Projects e selezionare la cartella studentDB come root o tramite clone. <br/>

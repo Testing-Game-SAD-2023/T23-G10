@@ -3,7 +3,7 @@ La documentazione dell'API è consultabile al link: https://app.swaggerhub.com/a
 Se il link non funzionasse è comunque possibile visualizzare la documentazione attraverso il file APIdoc.html nella cartella doc. <br/> <br/>
 
 <h2> Installazione </h2>
-L'applicazione è fornita attraverso il file studentDB-0.0.1-SNAPSHOT.jar nella cartella bin. Nella stessa cartella è anche fornito un file di configurazione <code>application.properties</code>; in particolare, le ultime due righe consentono di scegliere il porto su cui avviare il server e se utilizzare https o meno. Ci si assicuri che tale file si trovi nella stessa cartella del file jar. <br/>
+L'applicazione è fornita attraverso il file studentDB-0.0.1-SNAPSHOT.jar nella cartella bin. Nella stessa cartella è anche fornito un file di configurazione <code>application.properties</code>; è possibile ad esempio configurare opportunamente il mail server oppure le ultime due righe consentono di scegliere il porto su cui avviare il server e se utilizzare https o meno. Ci si assicuri che tale file si trovi nella stessa cartella del file jar. <br/>
 <br/> Per avviare l'applicazione da terminale: <code>java -jar studentDB-0.0.1-SNAPSHOT.jar</code> <br/> <br/>
 E' necessario avere una versione di <code>Java 17</code> o superiore, reperibile su https://www.oracle.com/it/java/technologies/downloads/. 
 <br/> <br/>

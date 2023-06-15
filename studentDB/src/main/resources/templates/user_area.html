@@ -16,14 +16,15 @@
             <div class="card mt-5">
                 <div class="card-body">
                     <div class="text-center mt-3 login-title">
-                    	<img src="http://localhost:9000/images/Login_logo.png" alt="User face" style="width: 100px; height: 100px; border-radius: 50%;">
+                    	<img src="/images/Login_logo.png" alt="User face" style="width: 100px; height: 100px; border-radius: 50%;">
    						<div class="text-center mt-3 login-title" id=id></div>
    					</div>   					
     
                     <button onclick="newGame()" class="btn btn-primary btn-block">NUOVA PARTITA</button>
           			<br/>
           			<button onclick="gameList()" class="btn btn-primary btn-block">STORICO PARTITE</button>
-                
+                	<br/>
+                	<button onclick="logout()" class="btn btn-primary btn-block">LOGOUT</button>
                 </div>
             </div>
         </div>
@@ -42,11 +43,15 @@
     function gameList() {
     	location.href = "http://localhost:8081/games/player/"+id;
     }
+    
+    function logout() {
+    	location.href = "/logout";
+    }
 </script>  
   
 <style>
         body {
-            background-image: url("http://localhost:9000/images/background.jpg");
+            background-image: url("/images/background.jpg");
             background-size: cover;
             font-family: 'Nunito', Arial, sans-serif;
             font-weight: 600; /* Imposta la variazione del font desiderata */

@@ -421,6 +421,22 @@ paths:
           description: Forbidden
       security:
       - cookieAuth: []
+  /h2-console:
+    get:
+      tags:
+      - admin
+      summary: Accedi alla console del database
+      description: Questo metodo consente all'admin di accedere alla console del database. Url e credenziali si trovano nel file di configurazione.
+      operationId: getH2Console
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            text/html: {}
+        "403":
+          description: Forbidden
+      security:
+      - cookieAuth: []
 components:
   schemas:
     Student:

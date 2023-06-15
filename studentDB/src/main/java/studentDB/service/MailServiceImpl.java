@@ -7,6 +7,7 @@ import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,9 @@ public class MailServiceImpl implements MailService {
 	
 	@Autowired
 	private JavaMailSender mailSender;
+	
+	@Value("${spring.mail.username}")
+	private String mailFrom;
 	
 	@Override
 	public void sendVerificationEmail(Student student, String siteURL)
@@ -32,7 +36,7 @@ public class MailServiceImpl implements MailService {
 	    MimeMessage message = mailSender.createMimeMessage();
 	    MimeMessageHelper helper = new MimeMessageHelper(message);
 	     
-	    helper.setFrom("progettosad@virgilio.it", "Testing-Game-SAD-2023");
+	    helper.setFrom(mailFrom, "Testing-Game-SAD-2023");
 	    helper.setTo(toAddress);
 	    helper.setSubject(subject);
 	     
@@ -53,7 +57,7 @@ public class MailServiceImpl implements MailService {
 	    MimeMessage message = mailSender.createMimeMessage();              
 	    MimeMessageHelper helper = new MimeMessageHelper(message);
 	     
-	    helper.setFrom("progettosad@virgilio.it", "Testing-Game-SAD-2023");
+	    helper.setFrom(mailFrom, "Testing-Game-SAD-2023");
 	    helper.setTo(recipientEmail);
 	     
 	    String subject = "Reset password";

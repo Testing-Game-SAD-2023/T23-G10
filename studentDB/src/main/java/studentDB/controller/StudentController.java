@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.repository.query.Param;
 import org.springframework.mail.MailSendException;
@@ -47,6 +48,12 @@ public class StudentController {
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	@Value("${t4.address}")
+	private String T4Address;
+	
+	@Value("${t5.address}")
+	private String T5Address;
 	
 	//Public//////////////////
 	
@@ -83,6 +90,8 @@ public class StudentController {
 		
 		String content = readHtml("templates/user_area.html");
 		content = content.replace("<<StudentId>>", userId.toString());
+		content = content.replace("<<T4Address>>", T4Address);
+		content = content.replace("<<T5Address>>", T5Address);
 		return content;
 		
 	}

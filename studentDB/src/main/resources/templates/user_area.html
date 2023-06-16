@@ -34,14 +34,17 @@
 
 <script>
     const id = "<<StudentId>>";
+    const T4Address = "<<T4Address>>";
+    const T5Address = "<<T5Address>>";
+    
     document.getElementById('id').textContent = "ID STUDENTE: " + id;
     
     function newGame() {
-    	location.href = "http://localhost:8080/mainmenu";
+    	location.href = T5Address +"/mainmenu/"+id;
     }
     
     function gameList() {
-    	location.href = "http://localhost:8081/games/player/"+id;
+    	location.href = T4Address +"/games/player/"+id;
     }
     
     function logout() {

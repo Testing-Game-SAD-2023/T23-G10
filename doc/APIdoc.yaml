@@ -2,7 +2,7 @@
 openapi: 3.0.3
 info:
   title: Student DB - OpenAPI 3.0
-  description: "Questa è l'API per il database degli studenti. Le funzionalità fondamentali offerte sono quelle di registrazione, login, logout e recupero della password, accessibili attraverso chiamate GET a /register, /login, /logout e /forgot-password. Dopo il login di default si accede all'area personale dell'utente che gli consente di avviare una nuova partita o visualizzare lo storico delle partite giocate. Se si volesse richiamare esplicitamente questa pagina si può effettuare una chiamata GET a /user/{userId}; ovviamente ogni utente può accedere solo alla propria area riservata. Inoltre se si volesse ricavare l'id dell'utente loggato, ad esempio per proteggere l'accesso ai propri metodi, è a disposizione la chiamata a /authenticated-id che restituisce l'id dell'utente autenticato, o -1 se la sessione non è valida. L'autenticazione è gestita attraverso il cookie JSESSIONID; per far sì che tale cookie venga scambiato correttamente sulle diverse applicazioni presenti sul server, i componenti che vogliono utilizzare le nostre funzionalità dovrebbero settare il path del cookie a \"/\" per evitare eventuali problemi. Sono presenti altri metodi pubblici che però vengono utilizzati automaticamente dalle pagine html fornite, per cui non dovrebbero essere invocati esplicitamente (o comunque la loro chiamata non avrebbe particolari effetti sul sistema nella maggior parte dei casi). Sono anche presenti alcune funzionalità, accessibili solo dall'utente admin, che consentono la gestione del database come visualizzare la lista degli studenti registrati o in generale effettuare operazioni CRUD."
+  description: "Questa è l'API per il database degli studenti. Le funzionalità fondamentali offerte sono quelle di registrazione, login, logout e recupero della password, accessibili attraverso chiamate GET a /register, /login, /logout e /forgot-password. Dopo il login di default si accede all'area personale dell'utente che gli consente di avviare una nuova partita o visualizzare lo storico delle partite giocate. Se si volesse richiamare esplicitamente questa pagina si può effettuare una chiamata GET a /user/{userId}; ovviamente ogni utente può accedere solo alla propria area riservata. Sono presenti altri metodi pubblici che però vengono utilizzati automaticamente dalle pagine html fornite, per cui non dovrebbero essere invocati esplicitamente (o comunque la loro chiamata non avrebbe particolari effetti sul sistema nella maggior parte dei casi). Sono anche presenti alcune funzionalità, accessibili solo dall'utente admin, che consentono la gestione del database come visualizzare la lista degli studenti registrati o in generale effettuare operazioni CRUD."
   version: "1.0"
 servers:
 - url: /
@@ -166,20 +166,6 @@ paths:
             text/html: {}
         "403":
           description: Forbidden
-      security:
-      - cookieAuth: []
-  /authenticated-id:
-    get:
-      tags:
-      - login
-      summary: Ottieni l'id dell'utente autenticato
-      description: L'invocazione di questo metodo permette di ottenere l'id dell'utente autenticato in base al cookie di sessione JSESSIONID. Restituisce la stringa "-1" se la sessione non è valida.
-      operationId: getAuthenticatedId
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            string: {}
       security:
       - cookieAuth: []
   /logout:
